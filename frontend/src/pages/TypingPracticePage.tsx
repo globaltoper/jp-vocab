@@ -16,7 +16,8 @@ const EMPTY_STATS: SessionStats = { attempts: 0, totalCpm: 0, bestCpm: 0 };
 
 // 목표 텍스트를 한 글자씩 렌더링하면서, 지금까지 입력한 글자와 비교해 색을 입힌다.
 // (타자 연습 사이트들의 표준 UX: 목표 문장을 미리 다 보여주고 맞은 글자/틀린 글자/아직 안 친 글자를 구분)
-function TypingTarget({ target, typed }: { target: string; typed: string }) {
+// export하는 이유: 이 비교 로직만 따로 테스트하기 위해 (테스트에서 페이지 전체를 렌더링할 필요 없이).
+export function TypingTarget({ target, typed }: { target: string; typed: string }) {
   return (
     <p className="typing-target">
       {target.split("").map((char, i) => {

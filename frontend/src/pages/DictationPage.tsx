@@ -13,7 +13,8 @@ const LEVELS: JlptLevel[] = ["N5", "N4", "N3", "N2", "N1"];
 // (완전한 문자열 정렬(diff) 알고리즘은 아니고, 같은 위치의 글자만 비교하는 방식이라
 //  글자를 하나 빼먹거나 더 쓴 경우는 그 이후 글자가 전부 다르게 보일 수 있다.
 //  그래도 "거의 맞았다 / 많이 다르다"를 한눈에 보여주는 용도로는 충분하다.)
-function CharDiff({ typed, correct }: { typed: string; correct: string }) {
+// export하는 이유: 이 비교 로직만 따로 테스트하기 위해.
+export function CharDiff({ typed, correct }: { typed: string; correct: string }) {
   const length = Math.max(typed.length, correct.length);
   const chars = Array.from({ length }, (_, i) => {
     const typedChar = typed[i];
