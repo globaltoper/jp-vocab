@@ -35,7 +35,7 @@ function CharDiff({ typed, correct }: { typed: string; correct: string }) {
 
 export function DictationPage() {
   const { isAuthenticated } = useAuth();
-  const { speak } = useTTS();
+  const { speak, preload, isSpeaking } = useTTS();
   const { inputRef, hiragana, reset: resetInput } = useRomajiInput();
 
   const [level, setLevel] = useState<JlptLevel | "">("");
@@ -78,6 +78,15 @@ export function DictationPage() {
       attemptStartRef.current = performance.now();
     }
   }, [hiragana]);
+
+  // 문장이 로딩되면 재생 버튼을 누르기 전에 미리 음성을 합성해둔다.
+  // 사용자가 실제로 "듣기"를 누를 때는 이미 캐시에 있어서 거의 즉시 재생된다.
+  useEffect(() => {
+    if (sentence) {
+      preload(sentence.sentenceJp, 1);
+      preload(sentence.sentenceJp, 0.7);
+    }
+  }, [sentence, preload]);
 
   function handlePlay(rate: number) {
     if (!sentence) return;
@@ -155,11 +164,16 @@ export function DictationPage() {
           <span className="word-level-badge">{sentence.level}</span>
 
           <div className="dictation-play-row">
-            <button type="button" className="tts-button" onClick={() => handlePlay(1)}>
-              🔊 듣기
+            <button type="button" className="tts-button" onClick={() => handlePlay(1)} disabled={isSpeaking}>
+              {isSpeaking ? "재생 준비 중..." : "🔊 듣기"}
             </button>
-            <button type="button" className="tts-button dictation-slow-button" onClick={() => handlePlay(0.7)}>
-              🐢 천천히 듣기
+            <button
+              type="button"
+              className="tts-button dictation-slow-button"
+              onClick={() => handlePlay(0.7)}
+              disabled={isSpeaking}
+            >
+              {isSpeaking ? "재생 준비 중..." : "🐢 천천히 듣기"}
             </button>
           </div>
 

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import * as wanakana from "wanakana";
 
 /**
@@ -12,32 +12,48 @@ import * as wanakana from "wanakana";
  *
  * 사용법: input 엘리먼트에 ref={inputRef}를 걸어주면, 그 input에 로마자를 치는 즉시
  * 화면의 값 자체가 히라가나로 바뀌고, hiragana 상태값도 같이 갱신된다.
+ *
+ * 왜 콜백 ref인가 (일반 useRef + useEffect가 아니라):
+ * - 이 훅을 쓰는 화면(딕테이션 등)은 문장을 비동기로 불러온 뒤에야 <input>이 렌더링된다.
+ *   즉 최초 렌더 시점에는 input이 DOM에 아직 없다. useEffect(() => {...}, [])는 "마운트 시 딱 한 번"만
+ *   실행되는데, 그 순간 input이 없으면 리스너가 영영 안 붙는다(나중에 input이 생겨도 재실행 안 됨).
+ * - 콜백 ref는 React가 그 DOM 노드를 실제로 붙이거나 뗄 때마다 직접 호출해주므로,
+ *   조건부 렌더링 여부와 상관없이 항상 정확한 타이밍에 붙는다.
  */
 export function useRomajiInput() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
   const [hiragana, setHiragana] = useState("");
+  const elementRef = useRef<HTMLInputElement | null>(null);
+  const inputListenerRef = useRef<(() => void) | null>(null);
 
-  useEffect(() => {
-    const el = inputRef.current;
-    if (!el) return;
-
-    // 1) wanakana가 이 input의 'input' 이벤트를 가로채서 로마자 -> 히라가나 변환을 먼저 수행한다.
-    wanakana.bind(el, { IMEMode: true });
-
-    // 2) 우리 리스너는 그 다음에 등록되므로, el.value를 읽을 때는 이미 변환이 끝난 값이다.
-    //    (같은 엘리먼트의 같은 이벤트 타입에 붙은 네이티브 리스너는 등록 순서대로 실행된다)
-    const handleInput = () => setHiragana(el.value);
-    el.addEventListener("input", handleInput);
-
-    return () => {
+  const detach = useCallback(() => {
+    const el = elementRef.current;
+    if (el) {
       wanakana.unbind(el);
-      el.removeEventListener("input", handleInput);
-    };
+      if (inputListenerRef.current) {
+        el.removeEventListener("input", inputListenerRef.current);
+      }
+    }
+    elementRef.current = null;
+    inputListenerRef.current = null;
   }, []);
 
+  const inputRef = useCallback(
+    (el: HTMLInputElement | null) => {
+      detach();
+      elementRef.current = el;
+      if (el) {
+        wanakana.bind(el, { IMEMode: true });
+        const handleInput = () => setHiragana(el.value);
+        inputListenerRef.current = handleInput;
+        el.addEventListener("input", handleInput);
+      }
+    },
+    [detach],
+  );
+
   const reset = useCallback(() => {
-    if (inputRef.current) {
-      inputRef.current.value = "";
+    if (elementRef.current) {
+      elementRef.current.value = "";
     }
     setHiragana("");
   }, []);
