@@ -6,6 +6,8 @@ import { WordCardPage } from "./pages/WordCardPage";
 import { WordDetailPage } from "./pages/WordDetailPage";
 import { SavedWordsPage } from "./pages/SavedWordsPage";
 import { ReviewPage } from "./pages/ReviewPage";
+import { DictationPage } from "./pages/DictationPage";
+import { TypingPracticePage } from "./pages/TypingPracticePage";
 import { LoginPage } from "./pages/LoginPage";
 import { SignupPage } from "./pages/SignupPage";
 import { FindUsernamePage } from "./pages/FindUsernamePage";
@@ -26,6 +28,8 @@ function App() {
             <Route path="/find-username" element={<FindUsernamePage />} />
             <Route path="/reset-password" element={<ResetPasswordPage />} />
             <Route path="/verify-email" element={<VerifyEmailPage />} />
+            <Route path="/dictation" element={<DictationPage />} />
+            <Route path="/typing-practice" element={<TypingPracticePage />} />
             <Route
               path="/saved"
               element={

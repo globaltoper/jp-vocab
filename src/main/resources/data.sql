@@ -480,3 +480,39 @@ INSERT IGNORE INTO example_sentence_words (id, example_sentence_id, word_id, sta
 INSERT IGNORE INTO example_sentence_words (id, example_sentence_id, word_id, start_index, end_index) VALUES (251, 109, 109, 3, 6);
 INSERT IGNORE INTO example_sentence_words (id, example_sentence_id, word_id, start_index, end_index) VALUES (252, 110, 65, 0, 2);
 INSERT IGNORE INTO example_sentence_words (id, example_sentence_id, word_id, start_index, end_index) VALUES (253, 110, 110, 6, 9);
+
+-- ============================================================
+-- 딕테이션(듣고 받아쓰기) 전용 문장. domain/example의 단어별 예문과는 별개.
+-- ============================================================
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (1, 'おはようございます。', 'おはようございます。', '좋은 아침입니다.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (2, '今日は天気がいいですね。', 'きょうはてんきがいいですね。', '오늘은 날씨가 좋네요.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (3, 'これは私の本です。', 'これはわたしのほんです。', '이것은 제 책입니다.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (4, 'すみません、駅はどこですか。', 'すみません、えきはどこですか。', '실례합니다, 역은 어디예요?', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (5, '私は毎朝お茶を飲みます。', 'わたしはまいあさおちゃをのみます。', '저는 매일 아침 차를 마셔요.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (6, '明日は友達と映画を見ます。', 'あしたはともだちとえいがをみます。', '내일은 친구와 영화를 봐요.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (7, '昨日は雨が降りました。', 'きのうはあめがふりました。', '어제는 비가 내렸어요.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (8, '今からご飯を食べます。', 'いまからごはんをたべます。', '지금부터 밥을 먹을게요.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (9, '週末は家でゆっくり休みます。', 'しゅうまつはいえでゆっくりやすみます。', '주말은 집에서 느긋하게 쉬어요.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (10, '夜遅くまで勉強しました。', 'よるおそくまでべんきょうしました。', '밤 늦게까지 공부했어요.', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (11, 'もう少し大きい声で話してください。', 'もうすこしおおきいこえではなしてください。', '조금 더 큰 목소리로 말해주세요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (12, '今度の休みに旅行に行きたいです。', 'こんどのやすみにりょこうにいきたいです。', '이번 휴가에 여행을 가고 싶어요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (13, '電車が遅れて会議に遅刻しました。', 'でんしゃがおくれてかいぎにちこくしました。', '전철이 늦어서 회의에 지각했어요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (14, '難しい問題でしたが、最後まで頑張りました。', 'むずかしいもんだいでしたが、さいごまでがんばりました。', '어려운 문제였지만 끝까지 열심히 했어요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (15, 'この道をまっすぐ行くと図書館があります。', 'このみちをまっすぐいくととしょかんがあります。', '이 길을 곧장 가면 도서관이 있어요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (16, '忙しくても毎日運動するようにしています。', 'いそがしくてもまいにちうんどうするようにしています。', '바쁘더라도 매일 운동하도록 하고 있어요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (17, '約束の時間に間に合わなくて困りました。', 'やくそくのじかんにまにあわなくてこまりました。', '약속 시간에 맞추지 못해서 곤란했어요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (18, '先生に分からないところを聞きました。', 'せんせいにわからないところをききました。', '선생님께 모르는 부분을 물었어요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (19, '引っ越しの準備で毎日忙しいです。', 'ひっこしのじゅんびでまいにちいそがしいです。', '이사 준비로 매일 바빠요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (20, '天気予報によると、明日は雪が降るそうです。', 'てんきよほうによると、あしたはゆきがふるそうです。', '일기예보에 따르면 내일은 눈이 온다고 해요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (21, '経済の状況が悪くなっているため、就職が難しくなっている。', 'けいざいのじょうきょうがわるくなっているため、しゅうしょくがむずかしくなっている。', '경제 상황이 나빠지고 있어서 취업이 어려워지고 있다.', 'N3', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (22, '彼は失敗を繰り返しながらも諦めずに挑戦を続けた。', 'かれはしっぱいをくりかえしながらもあきらめずにちょうせんをつづけた。', '그는 실패를 반복하면서도 포기하지 않고 도전을 계속했다.', 'N3', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (23, '環境を守るために、私たちにできることは何でしょうか。', 'かんきょうをまもるために、わたしたちにできることはなんでしょうか。', '환경을 지키기 위해 우리가 할 수 있는 일은 무엇일까요.', 'N3', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (24, '一度決めたことは最後まで責任を持ってやり遂げたい。', 'いちどきめたことはさいごまでせきにんをもってやりとげたい。', '한번 정한 일은 끝까지 책임을 지고 해내고 싶다.', 'N3', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (25, '忙しい日々の中でも、家族との時間を大切にしている。', 'いそがしいひびのなかでも、かぞくとのじかんをたいせつにしている。', '바쁜 나날 속에서도 가족과의 시간을 소중히 하고 있다.', 'N3', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (26, '名前は何ですか。', 'なまえはなんですか。', '이름이 무엇인가요?', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (27, '誕生日はいつですか。', 'たんじょうびはいつですか。', '생일이 언제예요?', 'N5', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (28, 'この漢字はどう読みますか。', 'このかんじはどうよみますか。', '이 한자는 어떻게 읽나요?', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (29, '頭が痛いので、今日は早く帰ります。', 'あたまがいたいので、きょうははやくかえります。', '머리가 아파서 오늘은 일찍 돌아가요.', 'N4', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (30, '相手の立場になって考えることが大切だと思う。', 'あいてのたちばになってかんがえることがたいせつだとおもう。', '상대방의 입장이 되어 생각하는 것이 중요하다고 생각한다.', 'N3', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (31, '努力すれば必ず結果が出るとは限らない。', 'どりょくすればかならずけっかがでるとはかぎらない。', '노력하면 반드시 결과가 나온다고는 할 수 없다.', 'N3', NOW());
+INSERT IGNORE INTO dictation_sentences (id, sentence_jp, sentence_reading, sentence_meaning, level, created_at) VALUES (32, '今日はとても楽しい一日でした。', 'きょうはとてもたのしいいちにちでした。', '오늘은 매우 즐거운 하루였어요.', 'N5', NOW());

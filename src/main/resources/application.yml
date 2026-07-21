@@ -50,3 +50,10 @@ app:
   email-verification-expiration-hours: 24
   # 비밀번호 재설정 토큰은 탈취 시 위험도가 높아서 훨씬 짧게 잡는다.
   password-reset-expiration-minutes: 30
+
+voicevox:
+  # 로컬 개발: docker run으로 띄운 VOICEVOX 엔진 주소(README 참고).
+  # 배포 시에는 VOICEVOX_BASE_URL 환경변수로 별도 서비스의 주소를 지정한다.
+  base-url: ${VOICEVOX_BASE_URL:http://localhost:50021}
+  # 3 = ずんだもん(즌다몬) 노멀 보이스. GET {base-url}/speakers 로 다른 목소리 id를 확인해서 바꿀 수 있다.
+  speaker-id: ${VOICEVOX_SPEAKER_ID:3}

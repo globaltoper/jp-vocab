@@ -133,3 +133,38 @@ export interface PasswordResetRequestResponse {
   // mock 단계라 토큰이 응답에 바로 온다. 실제 메일 발송으로 바뀌면 이 필드는 사라진다.
   token: string;
 }
+
+export interface DictationSentence {
+  id: number;
+  sentenceJp: string;
+  sentenceMeaning: string;
+  level: JlptLevel;
+  // sentenceReading(정답 읽기)은 서버가 응답에 포함하지 않는다 - 채점 전에 정답이 노출되면 안 되니까.
+}
+
+export interface DictationAttemptResult {
+  accuracyPercent: number;
+  cpm: number;
+  saved: boolean;
+  // 채점이 끝난 뒤에만 서버가 내려주는 정답 정보.
+  correctReading: string;
+  sentenceJp: string;
+  sentenceMeaning: string;
+}
+
+export interface TypingPracticeSentence {
+  id: number;
+  sentenceJp: string;
+  sentenceReading: string;
+  sentenceMeaning: string;
+  level: JlptLevel;
+}
+
+export interface DictationHistoryItem {
+  id: number;
+  sentenceJp: string;
+  sentenceMeaning: string;
+  accuracyPercent: number;
+  cpm: number;
+  createdAt: string;
+}

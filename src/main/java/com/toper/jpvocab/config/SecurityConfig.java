@@ -47,6 +47,12 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/words/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/words").permitAll()
+                        // 딕테이션도 word와 같은 "인증 선택" 패턴: 비로그인은 채점만, 로그인은 기록까지 저장.
+                        .requestMatchers(HttpMethod.GET, "/api/dictation/random").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/dictation/practice-random").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/dictation/*/attempt").permitAll()
+                        // 발음 듣기는 로그인 여부와 무관하게 누구나 쓸 수 있어야 한다.
+                        .requestMatchers(HttpMethod.POST, "/api/tts/speak").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

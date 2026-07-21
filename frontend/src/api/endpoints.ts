@@ -1,5 +1,9 @@
 import { apiClient } from "./client";
 import type {
+  DictationAttemptResult,
+  DictationHistoryItem,
+  DictationSentence,
+  TypingPracticeSentence,
   FindUsernameResponse,
   JlptLevel,
   LoginRequest,
@@ -54,4 +58,17 @@ export const reviewApi = {
   getDueCount: () => apiClient.get<ReviewDueCount>("/reviews/due/count"),
   submitResult: (wordId: number, remembered: boolean) =>
     apiClient.post<ReviewWord>(`/reviews/${wordId}/result`, { remembered }),
+};
+
+export const dictationApi = {
+  getRandom: (level?: JlptLevel) =>
+    apiClient.get<DictationSentence>(`/dictation/random${level ? `?level=${level}` : ""}`),
+  submitAttempt: (sentenceId: number, typedReading: string, elapsedMs: number) =>
+    apiClient.post<DictationAttemptResult>(`/dictation/${sentenceId}/attempt`, {
+      typedReading,
+      elapsedMs,
+    }),
+  getHistory: () => apiClient.get<DictationHistoryItem[]>("/dictation/history"),
+  getRandomForTyping: (level?: JlptLevel) =>
+    apiClient.get<TypingPracticeSentence>(`/dictation/practice-random${level ? `?level=${level}` : ""}`),
 };
