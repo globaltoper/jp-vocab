@@ -20,8 +20,8 @@ export function Navbar() {
       .catch(() => setDueCount(0));
   }, [isAuthenticated, location.pathname]);
 
-  function handleLogout() {
-    logout();
+  async function handleLogout() {
+    await logout();
     navigate("/");
   }
 

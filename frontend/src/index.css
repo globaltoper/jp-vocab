@@ -304,6 +304,12 @@ select {
   margin: 2rem auto;
 }
 
+.auth-links-row {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.85rem;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;
@@ -316,6 +322,21 @@ select {
   gap: 0.3rem;
   font-size: 0.9rem;
   color: var(--color-muted);
+}
+
+.auth-form-section {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-muted);
+  margin: 0.4rem 0 -0.4rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.auth-form-checkbox {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
 }
 
 .form-error {

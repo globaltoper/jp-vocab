@@ -8,6 +8,9 @@ import { SavedWordsPage } from "./pages/SavedWordsPage";
 import { ReviewPage } from "./pages/ReviewPage";
 import { LoginPage } from "./pages/LoginPage";
 import { SignupPage } from "./pages/SignupPage";
+import { FindUsernamePage } from "./pages/FindUsernamePage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage";
+import { VerifyEmailPage } from "./pages/VerifyEmailPage";
 
 function App() {
   return (
@@ -20,6 +23,9 @@ function App() {
             <Route path="/words/:wordId" element={<WordDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/find-username" element={<FindUsernamePage />} />
+            <Route path="/reset-password" element={<ResetPasswordPage />} />
+            <Route path="/verify-email" element={<VerifyEmailPage />} />
             <Route
               path="/saved"
               element={

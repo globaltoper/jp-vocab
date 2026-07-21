@@ -1,8 +1,11 @@
 import { apiClient } from "./client";
 import type {
+  FindUsernameResponse,
   JlptLevel,
   LoginRequest,
   LoginResponse,
+  MessageResponse,
+  PasswordResetRequestResponse,
   ReviewDueCount,
   ReviewWord,
   SavedWordCreated,
@@ -17,6 +20,16 @@ import type {
 export const authApi = {
   signup: (payload: SignupRequest) => apiClient.post<SignupResponse>("/auth/signup", payload),
   login: (payload: LoginRequest) => apiClient.post<LoginResponse>("/auth/login", payload),
+  // /auth/logout은 서버에서 permitAll이라 액세스 토큰이 만료된 상태여도 정상 동작한다.
+  // (실제로 필요한 건 refreshToken뿐 - 그걸 DB에서 폐기 처리한다)
+  logout: (refreshToken: string) => apiClient.post<void>("/auth/logout", { refreshToken }),
+  verifyEmail: (token: string) => apiClient.post<MessageResponse>("/auth/verify-email", { token }),
+  findUsername: (email: string) =>
+    apiClient.post<FindUsernameResponse>("/auth/find-username", { email }),
+  requestPasswordReset: (email: string) =>
+    apiClient.post<PasswordResetRequestResponse>("/auth/password-reset/request", { email }),
+  confirmPasswordReset: (token: string, newPassword: string) =>
+    apiClient.post<MessageResponse>("/auth/password-reset/confirm", { token, newPassword }),
 };
 
 export const wordApi = {

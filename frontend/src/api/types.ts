@@ -62,16 +62,29 @@ export interface SavedWordCreated {
   savedAt: string;
 }
 
+export type ReferralSource = "SEARCH" | "SNS" | "FRIEND" | "AD" | "OTHER";
+
 export interface SignupRequest {
   username: string;
   password: string;
   email: string;
+  birthDate?: string; // "YYYY-MM-DD"
+  phoneNumber?: string;
+  termsAgreed: boolean;
+  referrerUsername?: string;
+  targetLevel?: JlptLevel;
+  currentLevel?: JlptLevel;
+  dailyGoalCount?: number;
+  referralSource?: ReferralSource;
 }
 
 export interface SignupResponse {
   id: number;
   username: string;
   email: string;
+  targetLevel: JlptLevel | null;
+  currentLevel: JlptLevel | null;
+  dailyGoalCount: number | null;
 }
 
 export interface LoginRequest {
@@ -81,6 +94,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   accessToken: string;
+  refreshToken: string;
   tokenType: string;
   expiresIn: number;
 }
@@ -104,4 +118,18 @@ export interface ReviewWord {
 
 export interface ReviewDueCount {
   count: number;
+}
+
+export interface MessageResponse {
+  message: string;
+}
+
+export interface FindUsernameResponse {
+  username: string;
+}
+
+export interface PasswordResetRequestResponse {
+  message: string;
+  // mock 단계라 토큰이 응답에 바로 온다. 실제 메일 발송으로 바뀌면 이 필드는 사라진다.
+  token: string;
 }

@@ -51,6 +51,10 @@ export function LoginPage() {
       <p>
         계정이 없으신가요? <Link to="/signup">회원가입</Link>
       </p>
+      <p className="auth-links-row">
+        <Link to="/find-username">아이디 찾기</Link>
+        <Link to="/reset-password">비밀번호 찾기</Link>
+      </p>
     </div>
   );
 }
