@@ -1,6 +1,7 @@
 package com.toper.jpvocab.domain.user;
 
 import com.toper.jpvocab.common.dto.MessageResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "인증", description = "회원가입/로그인/토큰 재발급/이메일 인증/아이디·비밀번호 찾기 (전부 인증 불필요)")
 public class UserController {
 
     private final UserService userService;

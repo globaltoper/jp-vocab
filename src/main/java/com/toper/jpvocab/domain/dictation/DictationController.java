@@ -2,6 +2,7 @@ package com.toper.jpvocab.domain.dictation;
 
 import com.toper.jpvocab.domain.word.JlptLevel;
 import com.toper.jpvocab.security.SecurityUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/dictation")
 @RequiredArgsConstructor
+@Tag(name = "딕테이션/타자연습", description = "듣고 받아쓰기·타자연습 문제 조회 및 채점 (일부 인증 선택, history는 인증 필수)")
 public class DictationController {
 
     private final DictationService dictationService;

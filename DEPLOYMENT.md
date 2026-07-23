@@ -46,13 +46,19 @@ git push -u origin main
 
 ## 2. VOICEVOX 엔진 배포 (선택 - 발음 품질 개선)
 
-발음 듣기는 VOICEVOX 없이도 동작합니다(백엔드가 연결 실패하면 프런트가 브라우저 기본 음성으로 자동 전환). 다만 실제 서비스에서도 고품질 발음을 쓰고 싶다면 VOICEVOX 엔진을 별도 서비스로 하나 더 올리세요.
+발음 듣기는 3단계로 처리됩니다: ① `src/main/resources/tts-cache`에 미리 만들어 커밋해둔 파일(배포 이미지에 포함) → ② 이번 서버 프로세스가 새로 만든 런타임 캐시 → ③ VOICEVOX 실시간 합성(그마저 실패하면 프런트가 브라우저 기본 음성으로 자동 전환). 즉 VOICEVOX 없이도 앱은 항상 정상 동작합니다.
+
+**`scripts/warm_tts_cache.py`로 배포 전에 캐시를 미리 다 채워뒀다면(README.md 참고), 이 앱이 말하는 문장은 거의 다 고정 콘텐츠라서 실제 운영 중 VOICEVOX가 호출될 일이 거의 없습니다.** 그래서 프로덕션에 VOICEVOX 서비스를 아예 안 띄워도 되고, 이 경우 아래 단계는 전부 건너뛰어도 됩니다(비용 절감). 새 단어/문장을 나중에 추가할 계획이라면, VOICEVOX는 로컬에서 그때그때 warm-up 스크립트를 돌릴 때만 잠깐 띄우면 충분합니다.
+
+그래도 실시간 합성 폴백까지 운영 환경에서 살려두고 싶다면:
 
 1. Railway 같은 프로젝트 안에서 **+ New → Empty Service**(또는 Docker Image 배포) → Docker 이미지로 `voicevox/voicevox_engine:cpu-latest` 지정.
 2. 이 서비스는 **Public Networking을 켜지 마세요** - 외부에 노출할 필요가 없고, 인증이 없는 엔진이라 열어두면 아무나 리소스를 씁니다. 백엔드 서비스에서 Railway의 내부 네트워크 주소(`http://<voicevox-서비스명>.railway.internal:50021`)로 접근하게 합니다.
 3. 백엔드 서비스의 **Variables**에 추가:
    - `VOICEVOX_BASE_URL` = `http://<voicevox-서비스명>.railway.internal:50021`
 4. 백엔드를 재배포하면 끝. `/api/tts/speak`가 정상 응답하면 성공입니다.
+
+`TTS_CACHE_DIR` 환경변수는 굳이 안 정해줘도 됩니다(기본값 `/tmp/jpvocab-tts-cache` - 컨테이너 내 임시 폴더, 재배포하면 사라지는 런타임 전용 캐시일 뿐 실제 캐시는 ①번 번들 캐시가 담당).
 
 ## 3. 프론트엔드 배포 (Vercel)
 

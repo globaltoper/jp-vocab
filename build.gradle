@@ -27,6 +27,12 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
+    // API 문서(Swagger UI) - /swagger-ui/index.html 에서 확인 가능
+    // 주의: springdoc 2.7.0부터는 Spring Boot 3.4+(Spring Framework 6.2+)를 강하게 요구한다.
+    // 이 프로젝트는 Spring Boot 3.3.4라서, 3.3.0과 짝지어 릴리즈된 2.6.0을 써야 한다.
+    // (2.7.0/2.8.x를 쓰면 LiteWebJarsResourceResolver 관련 NoClassDefFoundError로 서버가 안 뜬다.)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
     runtimeOnly 'com.mysql:mysql-connector-j'
 
     implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"

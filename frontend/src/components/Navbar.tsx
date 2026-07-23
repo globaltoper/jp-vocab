@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { reviewApi } from "../api/endpoints";
+import { useVoicePreference } from "../hooks/useVoicePreference";
 
 export function Navbar() {
   const { isAuthenticated, username, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [dueCount, setDueCount] = useState(0);
+  const { voice, setVoice } = useVoicePreference();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -38,6 +40,24 @@ export function Navbar() {
         {isAuthenticated && (
           <Link to="/review">복습{dueCount > 0 ? ` (${dueCount})` : ""}</Link>
         )}
+        <div className="voice-toggle" role="group" aria-label="발음 목소리 선택">
+          <button
+            type="button"
+            className={voice === "FEMALE" ? "voice-toggle-button active" : "voice-toggle-button"}
+            onClick={() => setVoice("FEMALE")}
+            title="四国めたん"
+          >
+            여성 음성
+          </button>
+          <button
+            type="button"
+            className={voice === "MALE" ? "voice-toggle-button active" : "voice-toggle-button"}
+            onClick={() => setVoice("MALE")}
+            title="玄野武宏"
+          >
+            남성 음성
+          </button>
+        </div>
         {isAuthenticated ? (
           <>
             <span className="navbar-username">{username}님</span>

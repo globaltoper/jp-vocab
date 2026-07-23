@@ -106,6 +106,40 @@ select {
   padding: 2rem 1.25rem 4rem;
 }
 
+.voice-toggle {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+}
+
+.voice-toggle-button {
+  border: none;
+  background: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+  cursor: pointer;
+}
+
+.voice-toggle-button.active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.app-footer {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 2.5rem;
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
 .level-filter {
   margin-bottom: 1.5rem;
 }

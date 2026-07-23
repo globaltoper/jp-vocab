@@ -1,6 +1,7 @@
 package com.toper.jpvocab.domain.review;
 
 import com.toper.jpvocab.security.SecurityUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
+@Tag(name = "복습", description = "라이트너 박스 기반 복습 스케줄 조회/제출 (인증 필수)")
 public class ReviewController {
 
     private final ReviewService reviewService;

@@ -1,6 +1,7 @@
 package com.toper.jpvocab.domain.savedword;
 
 import com.toper.jpvocab.security.SecurityUtils;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/saved-words")
 @RequiredArgsConstructor
+@Tag(name = "저장 단어함", description = "내 단어장 저장/조회/삭제 (인증 필수)")
 public class SavedWordController {
 
     private final SavedWordService savedWordService;

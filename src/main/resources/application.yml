@@ -55,5 +55,10 @@ voicevox:
   # 로컬 개발: docker run으로 띄운 VOICEVOX 엔진 주소(README 참고).
   # 배포 시에는 VOICEVOX_BASE_URL 환경변수로 별도 서비스의 주소를 지정한다.
   base-url: ${VOICEVOX_BASE_URL:http://localhost:50021}
-  # 3 = ずんだもん(즌다몬) 노멀 보이스. GET {base-url}/speakers 로 다른 목소리 id를 확인해서 바꿀 수 있다.
-  speaker-id: ${VOICEVOX_SPEAKER_ID:3}
+  # 음성 캐시 저장 위치.
+  # - 배포 환경 기본값(/tmp/...): 컨테이너가 재시작되면 사라지는 임시 캐시일 뿐이고,
+  #   진짜 캐시는 scripts/warm_tts_cache.py로 미리 만들어 src/main/resources/tts-cache에
+  #   커밋해둔 파일들(배포 이미지에 그대로 포함됨)이 담당한다.
+  # - 로컬에서 warm_tts_cache.py를 돌릴 때는 아래처럼 이 값을 resources 폴더 자체로 지정해서 실행한다:
+  #     TTS_CACHE_DIR=src/main/resources/tts-cache ./gradlew bootRun
+  cache-dir: ${TTS_CACHE_DIR:/tmp/jpvocab-tts-cache}

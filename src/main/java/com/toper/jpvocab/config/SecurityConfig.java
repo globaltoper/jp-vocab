@@ -44,6 +44,11 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
+                        // Swagger UI / OpenAPI 문서는 API 자체가 아니라 "API를 보여주는 화면"이라
+                        // 로그인 여부와 무관하게 항상 열려있어야 한다.
+                        .requestMatchers(
+                                "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**", "/v3/api-docs.yaml")
+                        .permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/words/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/words").permitAll()

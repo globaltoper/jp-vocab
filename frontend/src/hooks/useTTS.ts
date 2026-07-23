@@ -1,21 +1,23 @@
 import { useCallback, useState } from "react";
 import { API_BASE_URL } from "../api/client";
+import { useVoicePreference } from "./useVoicePreference";
+import type { Voice } from "./useVoicePreference";
 
 // 여러 컴포넌트에서 useTTS()를 각자 호출해도, 재생 중인 오디오는 앱 전체에서 하나만 있어야 한다.
 // (브라우저의 window.speechSynthesis도 원래 전역 싱글턴이라 이 동작과 자연스럽게 맞다.)
 let currentAudio: HTMLAudioElement | null = null;
 
-// 같은 문장을 같은 속도로 다시 들을 때(딕테이션에서 "다시 듣기"를 누르는 경우가 많다) 매번
-// VOICEVOX에 새로 합성 요청을 보내지 않도록 오디오를 캐싱한다. 탭을 새로고침하면 비워지는
+// 같은 문장을 같은 속도/목소리로 다시 들을 때(딕테이션에서 "다시 듣기"를 누르는 경우가 많다)
+// 매번 서버에 새로 요청을 보내지 않도록 오디오를 캐싱한다. 탭을 새로고침하면 비워지는
 // 메모리 캐시라 용량 걱정 없이 써도 된다.
 const audioCache = new Map<string, Blob>();
 
-function cacheKey(text: string, rate: number): string {
-  return `${rate}::${text}`;
+function cacheKey(text: string, rate: number, voice: Voice): string {
+  return `${voice}::${rate}::${text}`;
 }
 
-async function fetchTtsBlob(text: string, rate: number): Promise<Blob> {
-  const key = cacheKey(text, rate);
+async function fetchTtsBlob(text: string, rate: number, voice: Voice): Promise<Blob> {
+  const key = cacheKey(text, rate, voice);
   const cached = audioCache.get(key);
   if (cached) {
     return cached;
@@ -24,7 +26,7 @@ async function fetchTtsBlob(text: string, rate: number): Promise<Blob> {
   const response = await fetch(`${API_BASE_URL}/tts/speak`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, speedScale: rate }),
+    body: JSON.stringify({ text, speedScale: rate, voice }),
   });
 
   if (!response.ok) {
@@ -38,6 +40,9 @@ async function fetchTtsBlob(text: string, rate: number): Promise<Blob> {
 
 export function useTTS() {
   const [isSpeaking, setIsSpeaking] = useState(false);
+  // Navbar에서 바뀐 선택이 이 훅을 쓰는 모든 페이지에 그대로 반영된다 - 호출하는 쪽(각 페이지)은
+  // voice를 신경 쓸 필요 없이 그냥 speak(text)만 부르면 된다.
+  const { voice } = useVoicePreference();
 
   // VOICEVOX(고품질 TTS) 서버가 아예 꺼져있거나 응답이 없을 때를 위한 최후의 수단.
   // 로봇 발음이지만, 최소한 무음보다는 낫다.
@@ -54,7 +59,7 @@ export function useTTS() {
     utterance.rate = rate;
 
     const voices = window.speechSynthesis.getVoices();
-    const jaVoice = voices.find((voice) => voice.lang.startsWith("ja"));
+    const jaVoice = voices.find((v) => v.lang.startsWith("ja"));
     if (jaVoice) {
       utterance.voice = jaVoice;
     }
@@ -77,7 +82,7 @@ export function useTTS() {
 
       setIsSpeaking(true);
       try {
-        const blob = await fetchTtsBlob(text, rate);
+        const blob = await fetchTtsBlob(text, rate, voice);
         const objectUrl = URL.createObjectURL(blob);
         const audio = new Audio(objectUrl);
         currentAudio = audio;
@@ -97,18 +102,21 @@ export function useTTS() {
         speakWithBrowserFallback(text, rate);
       }
     },
-    [speakWithBrowserFallback],
+    [voice, speakWithBrowserFallback],
   );
 
   // 화면에 소리를 내지 않고 미리 합성해서 캐시에 담아두기만 한다.
   // 딕테이션 페이지가 새 문장을 불러오는 즉시 이걸 불러두면, 사용자가 "듣기"를 누르는
   // 시점에는 이미 캐시에 있어서 거의 즉시 재생된다.
-  const preload = useCallback((text: string, rate = 1) => {
-    fetchTtsBlob(text, rate).catch(() => {
-      // 프리로드 실패는 조용히 무시한다 - 실제로 재생을 시도할 때 다시 시도되고,
-      // 그때도 실패하면 브라우저 폴백으로 넘어간다.
-    });
-  }, []);
+  const preload = useCallback(
+    (text: string, rate = 1) => {
+      fetchTtsBlob(text, rate, voice).catch(() => {
+        // 프리로드 실패는 조용히 무시한다 - 실제로 재생을 시도할 때 다시 시도되고,
+        // 그때도 실패하면 브라우저 폴백으로 넘어간다.
+      });
+    },
+    [voice],
+  );
 
-  return { speak, preload, isSpeaking };
+  return { speak, preload, isSpeaking, voice };
 }
