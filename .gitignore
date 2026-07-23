@@ -48,3 +48,9 @@ frontend/dist/
 frontend/.vite/
 frontend/*.local
 frontend/npm-debug.log*
+
+### 개인 학습용 문서 (공개 저장소에 올리지 않음) ###
+LEARNING.md
+LEARNING.html
+LEARNING.pdf
+STUDY_PLAN.md
