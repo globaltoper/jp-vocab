@@ -2,28 +2,6 @@
 
 Railway(백엔드 + MySQL) + Vercel(프론트엔드) 조합 기준. 둘 다 무료/최소 비용으로 시작할 수 있고 GitHub 연동만으로 배포됩니다.
 
-## 0. GitHub에 올리기
-
-이 프로젝트는 아직 커밋된 적이 없는 로컬 git 저장소입니다. **터미널(또는 IntelliJ 터미널)에서 직접** 아래를 실행하세요 (이 부분은 본인 계정 인증이 필요해서 제가 대신 못 해드립니다).
-
-```bash
-cd ~/dev/projects/jp-vocab-backend
-
-# IntelliJ가 git 작업 중이었다면 잠긴 락 파일이 남아있을 수 있습니다. 있으면 지워주세요.
-rm -f .git/index.lock
-
-git add -A
-git commit -m "Initial commit: JP vocab backend + frontend"
-```
-
-GitHub에서 새 저장소를 만든 뒤(Add README 등 옵션은 전부 체크 해제, 빈 저장소로 생성):
-
-```bash
-git remote add origin https://github.com/<your-username>/jp-vocab-backend.git
-git branch -M main
-git push -u origin main
-```
-
 ## 1. 백엔드 배포 (Railway)
 
 1. [railway.app](https://railway.app) 로그인 → **New Project** → **Deploy from GitHub repo** → 방금 올린 저장소 선택.
@@ -83,7 +61,7 @@ CORS_ALLOWED_ORIGINS=https://<프로젝트명>.vercel.app,http://localhost:5173
 
 1. Vercel 도메인 접속 → 랜덤 단어 카드가 뜨는지 확인
 2. 회원가입 → 로그인 → 단어 저장 → 내 단어장/복습 페이지 동작 확인
-3. 안 되면 브라우저 개발자도구 Network 탭에서 CORS 에러인지, 401/404인지 확인 후 알려주시면 같이 봐드릴게요.
+3. 안 되면 브라우저 개발자도구 Network 탭에서 CORS 에러인지, 401/404인지부터 확인한다.
 
 ## 참고
 
