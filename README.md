@@ -1,3 +1,15 @@
+# 日本語単語帳 (JP Vocab)
+
+JLPT学習者向けの単語学習Webサービス。Spring Boot + MySQL のバックエンドと
+React + TypeScript のフロントエンドで構成した個人開発のフルスタックプロジェクトです。
+企画・設計・開発・デプロイまで一人で担当しました。
+
+- デモ: https://jp-vaocab.vercel.app/
+- API仕様(Swagger UI): https://jp-vaocab-production.up.railway.app/swagger-ui/index.html
+- 設計資料: [ARCHITECTURE.md](./ARCHITECTURE.md)
+
+---
+
 # 일본어 단어장 (JP Vocab)
 
 JLPT 학습자를 위한 개인 단어장 웹 서비스. Spring Boot + MySQL 백엔드와 React + TypeScript 프론트엔드로 구성된 풀스택 프로젝트입니다.
@@ -90,8 +102,7 @@ Railway(백엔드+MySQL) + Vercel(프론트엔드)로 배포하는 단계별 가
 - `example_sentence_words`에 `position` 대신 `start_index`/`end_index` 두 컬럼을 두었습니다. API 응답의 `linkedWords`가 시작/끝 인덱스를 모두 요구하기 때문입니다.
 - 별도의 `ExampleController`는 만들지 않았습니다. API 명세상 예문은 단어 상세 조회(`GET /api/words/{wordId}`) 응답에 포함되는 형태로만 노출되기 때문입니다.
 - Java 25 대신 21(LTS) 툴체인을 사용했습니다. 라이브러리/툴 생태계 호환성이 더 넓고 안정적입니다. `build.gradle`의 `JavaLanguageVersion`만 바꾸면 25로 전환할 수 있습니다.
-- 이 개발 환경은 Maven Central/Gradle 배포 서버에 대한 네트워크 접근이 막혀 있어 `./gradlew build`로 백엔드 컴파일을 직접 검증하지 못했습니다. 코드는 꼼꼼히 검토했지만, 로컬(IntelliJ 등)에서 첫 빌드 시 오류가 나면 알려주세요. 프론트엔드 코드는 별도 환경에서 `npm run build`로 정상 빌드를 확인했습니다.
-- `frontend/node_modules`는 이 개발 환경의 파일 삭제 제약 때문에 일부 손상되어 있을 수 있습니다(`rolldown` 네이티브 바이너리 오류가 날 수 있음). 처음 받으면 위 안내대로 `node_modules`를 지우고 `npm install`을 새로 하면 정상 동작합니다.
+- `frontend/node_modules` 관련 오류(예: `rolldown` 네이티브 바이너리 오류)가 나면, 위 안내대로 `node_modules`를 지우고 `npm install`을 새로 하면 해결됩니다.
 - 복습 기능(라이트너 박스): 단어 저장 시 자동으로 복습 스케줄이 생성됩니다. `GET /api/reviews/due`, `GET /api/reviews/due/count`, `POST /api/reviews/{wordId}/result`(`{ "remembered": true|false }`) 3개 API와 프론트 `/review` 페이지가 추가되었습니다.
 - 인증: 로그인 시 액세스 토큰(30분)과 리프레시 토큰(14일, DB 저장)을 함께 발급합니다. `POST /api/auth/refresh`로 재발급(회전), `POST /api/auth/logout`으로 폐기. 프론트는 401을 받으면 자동으로 리프레시 후 재시도합니다.
 - 회원가입 확장 필드: 생일/전화번호/약관동의(필수)/추천인/희망레벨/현재레벨/하루목표단어수/유입경로.
