@@ -217,7 +217,7 @@ erDiagram
 
 | Method | Path | 인증 | 요청 | 응답 |
 |---|---|---|---|---|
-| POST | `/speak` | 공개 | `TtsSpeakRequest(text, speedScale?)` | `audio/wav` 바이너리 |
+| POST | `/speak` | 공개 | `TtsSpeakRequest(text, speedScale?, voice?)` | `audio/wav` 바이너리 |
 
 ## 5. 인증 흐름
 
