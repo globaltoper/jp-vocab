@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import type { JlptLevel, WordCard } from "../api/types";
 import { wordApi, savedWordApi } from "../api/endpoints";
 import { ApiError } from "../api/client";
@@ -12,7 +12,11 @@ export function WordCardPage() {
   const { isAuthenticated } = useAuth();
   const { speak } = useTTS();
 
-  const [level, setLevel] = useState<JlptLevel | "">("");
+  const [searchParams] = useSearchParams();
+  const levelFromUrl = searchParams.get("level");
+  const initialLevel = LEVELS.includes(levelFromUrl as JlptLevel) ? (levelFromUrl as JlptLevel) : "";
+
+  const [level, setLevel] = useState<JlptLevel | "">(initialLevel);
   const [word, setWord] = useState<WordCard | null>(null);
   const [showMeaning, setShowMeaning] = useState(false);
   const [showFurigana, setShowFurigana] = useState(false);

@@ -33,7 +33,7 @@ export function Navbar() {
         日本語単語帳
       </Link>
       <nav className="navbar-links">
-        <Link to="/">단어 카드</Link>
+        <Link to="/words">단어 카드</Link>
         <Link to="/dictation">딕테이션</Link>
         <Link to="/typing-practice">타자 연습</Link>
         {isAuthenticated && <Link to="/saved">내 단어장</Link>}

@@ -7,6 +7,15 @@
   --color-primary: #c8553d;
   --color-primary-dark: #a5442f;
   --color-accent: #588157;
+
+  /* 제주 테마 팔레트 (홈 화면부터 순차 적용 중) */
+  --jeju-emerald: #1f8a70;
+  --jeju-emerald-dark: #146354;
+  --jeju-sea-light: #d7f3ea;
+  --jeju-tangerine: #f5942a;
+  --jeju-tangerine-dark: #d97b16;
+  --jeju-basalt: #3a3a3a;
+
   font-family: "Hiragino Sans", "Noto Sans KR", "Noto Sans JP", system-ui, sans-serif;
   color-scheme: light;
 }
@@ -634,4 +643,136 @@ select {
 
 .typing-complete {
   margin-top: 1rem;
+}
+
+/* ===================== 홈 화면 (제주 테마) ===================== */
+
+.home-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--jeju-emerald) 0%, var(--jeju-emerald-dark) 100%);
+  border-radius: 20px;
+  padding: 2.5rem 2rem 3rem;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.home-hero-title {
+  font-size: 1.7rem;
+  margin: 0 0 0.6rem;
+}
+
+.home-hero-subtitle {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  opacity: 0.92;
+  margin: 0;
+  max-width: 30rem;
+}
+
+.dolharubang-silhouette {
+  position: absolute;
+  right: 1.2rem;
+  bottom: -0.6rem;
+  width: 72px;
+  height: auto;
+  fill: rgba(255, 255, 255, 0.22);
+}
+
+.home-random-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  background: linear-gradient(120deg, var(--jeju-sea-light), #fff);
+  border: 1px solid var(--jeju-emerald);
+  border-radius: 16px;
+  padding: 1.2rem 1.4rem;
+  margin-bottom: 2rem;
+  color: var(--color-text);
+}
+
+.home-random-card:hover {
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(31, 138, 112, 0.15);
+}
+
+.home-random-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--jeju-emerald-dark);
+}
+
+.home-random-desc {
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+
+.home-section-title {
+  font-size: 0.95rem;
+  color: var(--color-muted);
+  margin: 0 0 0.8rem;
+}
+
+.home-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.home-category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 1.3rem 0.6rem;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: center;
+  color: var(--color-text);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.home-category-card:hover {
+  text-decoration: none;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border-color: var(--jeju-tangerine);
+}
+
+.home-category-level {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--jeju-tangerine-dark);
+}
+
+.home-category-label {
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.home-secondary-links {
+  display: flex;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.home-secondary-link {
+  flex: 1;
+  min-width: 140px;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  text-align: center;
+  color: var(--color-text);
+}
+
+.home-secondary-link:hover {
+  text-decoration: none;
+  border-color: var(--jeju-tangerine);
+  color: var(--jeju-tangerine-dark);
 }

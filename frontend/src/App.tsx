@@ -3,6 +3,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { ProtectedRoute } from "./components/ProtectedRoute";
+import { HomePage } from "./pages/HomePage";
 import { WordCardPage } from "./pages/WordCardPage";
 import { WordDetailPage } from "./pages/WordDetailPage";
 import { SavedWordsPage } from "./pages/SavedWordsPage";
@@ -22,7 +23,8 @@ function App() {
         <Navbar />
         <main className="app-main">
           <Routes>
-            <Route path="/" element={<WordCardPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/words" element={<WordCardPage />} />
             <Route path="/words/:wordId" element={<WordDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
