@@ -1,7 +1,11 @@
 :root {
-  --color-bg: #fbfaf7;
-  --color-surface: #ffffff;
-  --color-border: #e6e1d8;
+  /* 뉴트럴 톤온톤: 클라우드 댄서(페이지) 위에 웜 오프화이트(카드),
+     그보다 한 톤 가라앉은 오트밀(보조/인용 영역). 색 단차로 구분되니 테두리는 약하게. */
+  --color-bg: #f0eee9;
+  --color-surface: #faf8f4;
+  --color-surface-sunken: #e9e3d8;
+  --color-border: #e2dcd1;
+  --color-border-soft: #eae5dc;
   --color-text: #2b2620;
   --color-muted: #7a7266;
   --color-primary: #c8553d;
@@ -166,7 +170,7 @@ select {
 
 .word-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   border-radius: 16px;
   padding: 2.5rem 2rem;
   text-align: center;
@@ -270,7 +274,7 @@ select {
 
 .example-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   border-radius: 12px;
   padding: 1.2rem 1.4rem;
   margin-bottom: 1rem;
@@ -411,7 +415,7 @@ select {
   align-items: center;
   justify-content: space-between;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   border-radius: 10px;
   padding: 0.8rem 1rem;
 }
@@ -468,7 +472,7 @@ select {
 .dictation-card,
 .typing-card {
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   border-radius: 16px;
   padding: 2.5rem 2rem;
   text-align: center;
@@ -722,8 +726,8 @@ select {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  background: linear-gradient(120deg, #fdeadb 0%, #fff 70%);
-  border: 1px solid var(--jeju-tangerine);
+  background: linear-gradient(120deg, #f7e5d2 0%, var(--color-surface) 72%);
+  border: 1px solid rgba(217, 123, 22, 0.35);
   border-radius: 16px;
   padding: 1.2rem 1.4rem;
   margin-bottom: 2rem;
@@ -767,7 +771,7 @@ select {
   gap: 0.3rem;
   padding: 1.3rem 0.6rem;
   border-radius: 14px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-soft);
   background: var(--color-surface);
   text-align: center;
   color: var(--color-text);
@@ -777,8 +781,8 @@ select {
 .home-category-card:hover {
   text-decoration: none;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  border-color: var(--jeju-tangerine);
+  box-shadow: 0 6px 16px rgba(43, 38, 32, 0.09);
+  border-color: rgba(217, 123, 22, 0.5);
 }
 
 .home-category-level {
@@ -804,14 +808,15 @@ select {
   min-width: 140px;
   padding: 1rem;
   border-radius: 12px;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border: none;
+  background: var(--color-surface-sunken);
   text-align: center;
   color: var(--color-text);
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .home-secondary-link:hover {
   text-decoration: none;
-  border-color: var(--jeju-tangerine);
+  background: #e0d8c9;
   color: var(--jeju-tangerine-dark);
 }
