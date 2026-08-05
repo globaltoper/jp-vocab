@@ -97,6 +97,24 @@ VOICEVOX 이용약관상 캐릭터 음성을 쓰는 경우 크레딧 표시가 �
 
 Railway(백엔드+MySQL) + Vercel(프론트엔드)로 배포하는 단계별 가이드는 [`DEPLOYMENT.md`](./DEPLOYMENT.md) 참고.
 
+## 데이터 출처 및 라이선스
+
+이 앱의 어휘 데이터는 공개 라이선스 데이터셋을 사용합니다. 전체 조건과 원문 인용은
+[`LICENSES.md`](./LICENSES.md)에 정리되어 있습니다.
+
+- **단어 · 읽기 · 뜻**: [JMdict](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project) (EDRDG, CC BY-SA 4.0)
+- **JLPT 레벨 구분**: [JLPT Resources](http://www.tanos.co.uk/jlpt/) (Jonathan Waller, CC BY) — JLPT 공식 어휘 목록은 공개되지 않으므로 참고용 추정치입니다
+- **예문**: [Tatoeba](https://tatoeba.org/) CC0 배포분
+- **발음 음성**: [VOICEVOX](https://voicevox.hiroshiba.jp/) (四国めたん · 玄野武宏)
+
+JMdict에서 파생된 데이터 파일은 ShareAlike 조건에 따라 CC BY-SA 4.0으로 배포됩니다.
+이 조건은 데이터에만 적용되며 애플리케이션 코드에는 적용되지 않습니다.
+
+### 데이터 갱신
+
+JMdict 라이선스는 데이터를 최신 버전으로 정기 갱신할 것을 요구합니다(4항).
+갱신 절차는 `LICENSES.md`와 갱신 스크립트를 참고하세요.
+
 ## 참고 (명세와 다르게 구현한 부분)
 
 - `example_sentence_words`에 `position` 대신 `start_index`/`end_index` 두 컬럼을 두었습니다. API 응답의 `linkedWords`가 시작/끝 인덱스를 모두 요구하기 때문입니다.
