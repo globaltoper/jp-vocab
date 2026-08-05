@@ -1,5 +1,5 @@
 :root {
-  --color-bg: #faf7f2;
+  --color-bg: #fbfaf7;
   --color-surface: #ffffff;
   --color-border: #e6e1d8;
   --color-text: #2b2620;
@@ -15,6 +15,17 @@
   --jeju-tangerine: #f5942a;
   --jeju-tangerine-dark: #d97b16;
   --jeju-basalt: #3a3a3a;
+
+  /* 노을 그라데이션: 바다 -> 산호빛 -> 감귤 */
+  --jeju-sunset: linear-gradient(
+    135deg,
+    #1a8472 0%,
+    #4aa892 32%,
+    #e8907f 58%,
+    #f0a054 80%,
+    #f5942a 100%
+  );
+  --jeju-sunset-coral: #e8907f;
 
   font-family: "Hiragino Sans", "Noto Sans KR", "Noto Sans JP", system-ui, sans-serif;
   color-scheme: light;
@@ -653,7 +664,7 @@ select {
   justify-content: space-between;
   gap: 1rem;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--jeju-emerald) 0%, var(--jeju-emerald-dark) 100%);
+  background: var(--jeju-sunset);
   border-radius: 20px;
   padding: 2.2rem 2rem 0;
   color: #fff;
@@ -667,14 +678,15 @@ select {
 .home-hero-title {
   font-size: 1.7rem;
   margin: 0 0 0.6rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
 }
 
 .home-hero-subtitle {
   font-size: 0.95rem;
   line-height: 1.5;
-  opacity: 0.92;
   margin: 0;
   max-width: 24rem;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.16);
 }
 
 .home-hero-mascot {
@@ -710,8 +722,8 @@ select {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  background: linear-gradient(120deg, var(--jeju-sea-light), #fff);
-  border: 1px solid var(--jeju-emerald);
+  background: linear-gradient(120deg, #fdeadb 0%, #fff 70%);
+  border: 1px solid var(--jeju-tangerine);
   border-radius: 16px;
   padding: 1.2rem 1.4rem;
   margin-bottom: 2rem;
@@ -720,13 +732,13 @@ select {
 
 .home-random-card:hover {
   text-decoration: none;
-  box-shadow: 0 6px 16px rgba(31, 138, 112, 0.15);
+  box-shadow: 0 6px 16px rgba(217, 123, 22, 0.18);
 }
 
 .home-random-title {
   font-weight: 700;
   font-size: 1.05rem;
-  color: var(--jeju-emerald-dark);
+  color: var(--jeju-tangerine-dark);
 }
 
 .home-random-desc {
