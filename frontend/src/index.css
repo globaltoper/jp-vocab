@@ -1,35 +1,34 @@
 :root {
-  /* 뉴트럴 톤온톤: 클라우드 댄서(페이지) 위에 웜 오프화이트(카드),
-     그보다 한 톤 가라앉은 오트밀(보조/인용 영역). 색 단차로 구분되니 테두리는 약하게. */
-  --color-bg: #f0eee9;
-  --color-surface: #faf8f4;
-  --color-surface-sunken: #e9e3d8;
-  --color-border: #e2dcd1;
-  --color-border-soft: #eae5dc;
-  --color-text: #2b2620;
-  --color-muted: #7a7266;
-  --color-primary: #c8553d;
-  --color-primary-dark: #a5442f;
-  --color-accent: #588157;
+  /* 바탕이 되는 클라우드 댄서 */
+  --bg-cloud-dancer: #f4f5f6;
 
-  /* 제주 테마 팔레트 (홈 화면부터 순차 적용 중) */
-  --jeju-emerald: #1f8a70;
-  --jeju-emerald-dark: #146354;
-  --jeju-sea-light: #d7f3ea;
-  --jeju-tangerine: #f5942a;
-  --jeju-tangerine-dark: #d97b16;
-  --jeju-basalt: #3a3a3a;
+  /* 텍스트용 모던 다크 포인트 */
+  --text-charcoal: #333333;
+  --text-deep-navy: #1a2436;
 
-  /* 노을 그라데이션: 바다 -> 산호빛 -> 감귤 */
-  --jeju-sunset: linear-gradient(
-    135deg,
-    #1a8472 0%,
-    #4aa892 32%,
-    #e8907f 58%,
-    #f0a054 80%,
-    #f5942a 100%
-  );
-  --jeju-sunset-coral: #e8907f;
+  /* 버튼 및 링크용 차분한 블루/틸 */
+  --primary-muted-blue: #5c7893;
+  --accent-teal: #235f64;
+
+  /* 구역 구분을 위한 뉴트럴 톤온톤 */
+  --surface-warm-beige: #eae6df;
+
+  /* --- 위 팔레트에서 파생시킨 값들 --- */
+  --color-bg: var(--bg-cloud-dancer);
+  --color-surface: #ffffff;
+  --color-surface-sunken: var(--surface-warm-beige);
+  --color-text: var(--text-charcoal);
+  --color-muted: #7b8288;
+  --color-border: #e0e3e6;
+  --color-border-soft: #eaecee;
+  --color-primary: var(--primary-muted-blue);
+  --color-primary-dark: #48607a;
+  --color-accent: var(--accent-teal);
+  /* 오류/오답 표시는 차분한 블루와 구분되어야 해서 별도 톤을 둔다 */
+  --color-danger: #a8544b;
+
+  /* 히어로 그라데이션: 틸 -> 뮤티드 블루 */
+  --hero-gradient: linear-gradient(135deg, #235f64 0%, #3d6d82 48%, #5c7893 100%);
 
   font-family: "Hiragino Sans", "Noto Sans KR", "Noto Sans JP", system-ui, sans-serif;
   color-scheme: light;
@@ -57,17 +56,30 @@ a:hover {
 button {
   font-family: inherit;
   cursor: pointer;
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
+  border: 1px solid transparent;
+  background: var(--primary-muted-blue);
+  color: #ffffff;
   border-radius: 8px;
   padding: 0.5rem 1rem;
   font-size: 0.95rem;
 }
 
 button:hover:not(:disabled) {
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  background: var(--color-primary-dark);
+  color: #ffffff;
+}
+
+/* 보조 동작용 - 배경 없이 테두리만 */
+.button-quiet {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+
+.button-quiet:hover:not(:disabled) {
+  background: var(--color-surface);
+  color: var(--accent-teal);
+  border-color: var(--accent-teal);
 }
 
 button:disabled {
@@ -207,6 +219,7 @@ select {
   background: none;
   font-size: 1rem;
   padding: 0 0.3rem;
+  color: var(--color-text);
   vertical-align: middle;
 }
 
@@ -215,6 +228,12 @@ select {
   gap: 0.75rem;
   justify-content: center;
   margin-bottom: 1rem;
+}
+
+.word-toggle-row button {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-border);
 }
 
 .word-furigana {
@@ -292,14 +311,14 @@ select {
   padding: 0;
   margin: 0;
   font: inherit;
-  color: var(--color-primary);
-  border-bottom: 1px dashed var(--color-primary);
+  color: var(--accent-teal);
+  border-bottom: 1px dashed var(--accent-teal);
   border-radius: 0;
 }
 
 .linked-word:hover {
-  color: var(--color-primary-dark);
-  border-color: var(--color-primary-dark);
+  color: var(--accent-teal);
+  border-color: var(--accent-teal);
 }
 
 .example-reading {
@@ -338,13 +357,13 @@ select {
 }
 
 .review-forgot {
-  background: #efe3e0;
-  color: var(--color-primary-dark);
+  background: var(--surface-warm-beige);
+  color: var(--text-deep-navy);
 }
 
 .review-forgot:hover {
-  background: #e6d2ce;
-  color: var(--color-primary-dark);
+  background: #ded8cd;
+  color: var(--text-deep-navy);
 }
 
 .review-remembered {
@@ -353,7 +372,7 @@ select {
 }
 
 .review-remembered:hover {
-  background: #476b46;
+  background: #1a4a4e;
   color: white;
 }
 
@@ -398,7 +417,7 @@ select {
 }
 
 .form-error {
-  color: var(--color-primary);
+  color: var(--color-danger);
   font-size: 0.9rem;
 }
 
@@ -444,14 +463,15 @@ select {
 }
 
 .delete-button {
+  background: var(--color-surface);
   border-color: var(--color-border);
   color: var(--color-muted);
   font-size: 0.85rem;
 }
 
 .delete-button:hover {
-  color: var(--color-primary);
-  border-color: var(--color-primary);
+  color: var(--color-danger);
+  border-color: var(--color-danger);
 }
 
 /* ===================== 딕테이션 / 타자 연습 ===================== */
@@ -572,9 +592,9 @@ select {
 }
 
 .diff-miss {
-  color: var(--color-primary);
+  color: var(--color-danger);
   text-decoration: underline;
-  text-decoration-color: var(--color-primary);
+  text-decoration-color: var(--color-danger);
 }
 
 .dictation-sentence-jp {
@@ -647,7 +667,7 @@ select {
 
 .typing-incorrect {
   color: white;
-  background: var(--color-primary);
+  background: var(--color-danger);
   border-radius: 3px;
 }
 
@@ -668,7 +688,7 @@ select {
   justify-content: space-between;
   gap: 1rem;
   overflow: hidden;
-  background: var(--jeju-sunset);
+  background: var(--hero-gradient);
   border-radius: 20px;
   padding: 2.2rem 2rem 0;
   color: #fff;
@@ -726,8 +746,8 @@ select {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
-  background: linear-gradient(120deg, #f7e5d2 0%, var(--color-surface) 72%);
-  border: 1px solid rgba(217, 123, 22, 0.35);
+  background: linear-gradient(120deg, var(--surface-warm-beige) 0%, var(--color-surface) 72%);
+  border: 1px solid rgba(35, 95, 100, 0.28);
   border-radius: 16px;
   padding: 1.2rem 1.4rem;
   margin-bottom: 2rem;
@@ -736,13 +756,13 @@ select {
 
 .home-random-card:hover {
   text-decoration: none;
-  box-shadow: 0 6px 16px rgba(217, 123, 22, 0.18);
+  box-shadow: 0 6px 16px rgba(26, 36, 54, 0.12);
 }
 
 .home-random-title {
   font-weight: 700;
   font-size: 1.05rem;
-  color: var(--jeju-tangerine-dark);
+  color: var(--accent-teal);
 }
 
 .home-random-desc {
@@ -781,14 +801,14 @@ select {
 .home-category-card:hover {
   text-decoration: none;
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(43, 38, 32, 0.09);
-  border-color: rgba(217, 123, 22, 0.5);
+  box-shadow: 0 6px 16px rgba(26, 36, 54, 0.1);
+  border-color: rgba(35, 95, 100, 0.45);
 }
 
 .home-category-level {
   font-size: 1.3rem;
   font-weight: 700;
-  color: var(--jeju-tangerine-dark);
+  color: var(--accent-teal);
 }
 
 .home-category-label {
@@ -817,6 +837,6 @@ select {
 
 .home-secondary-link:hover {
   text-decoration: none;
-  background: #e0d8c9;
-  color: var(--jeju-tangerine-dark);
+  background: #ded9d0;
+  color: var(--accent-teal);
 }
