@@ -14,9 +14,11 @@ src/main/resources/tts-cache 에 캐시 파일로 채워두는 스크립트.
        TTS_CACHE_DIR=src/main/resources/tts-cache ./gradlew bootRun
   3) 이 스크립트를 실행한다 (프로젝트 루트 어디서 실행해도 상관없다):
        python3 scripts/warm_tts_cache.py
-  4) 새로 생긴 .wav 파일들을 git에 커밋한다:
+  4) 새로 생긴 .m4a 파일들을 git에 커밋한다:
        git add src/main/resources/tts-cache
        git commit -m "chore: warm up tts cache"
+
+필요 조건: ffmpeg (VOICEVOX가 주는 WAV를 AAC로 변환하는 데 쓴다. brew install ffmpeg)
 
 이미 캐시 파일이 있는 조합은 건너뛰므로, 중간에 실패하거나 멈춰도 다시 실행하면 이어서 진행된다.
 단어/딕테이션 문장을 새로 추가한 뒤에도 이 스크립트를 다시 돌리면 새로 추가된 것만 생성된다.
@@ -24,7 +26,10 @@ src/main/resources/tts-cache 에 캐시 파일로 채워두는 스크립트.
 
 import hashlib
 import json
+import shutil
+import subprocess
 import sys
+import tempfile
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -33,6 +38,9 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_SQL = PROJECT_ROOT / "src/main/resources/data.sql"
 CACHE_DIR = PROJECT_ROOT / "src/main/resources/tts-cache"
 BACKEND_URL = "http://localhost:8080/api/tts/speak"
+
+# 백엔드 TtsService 의 AUDIO_EXTENSION 과 반드시 같아야 번들 캐시가 맞아떨어진다.
+AUDIO_EXT = ".m4a"
 
 # 백엔드 domain/tts/Voice.java 의 enum 이름 및 speaker id와 반드시 일치해야 한다.
 VOICES = {
@@ -103,9 +111,10 @@ def cache_key(text: str, speaker_id: int, speed_scale: float) -> str:
 
 
 def request_and_cache(text: str, speed_scale: float, voice_name: str, speaker_id: int) -> bool:
-    """반환값: 실제로 새로 요청을 보냈으면 True, 이미 캐시 파일이 있어서 건너뛰었으면 False."""
+    """반환값: 실제로 새로 만들었으면 True, 이미 캐시 파일이 있어서 건너뛰었으면 False."""
     key = cache_key(text, speaker_id, speed_scale)
-    if (CACHE_DIR / f"{key}.wav").exists():
+    target = CACHE_DIR / f"{key}{AUDIO_EXT}"
+    if target.exists():
         return False
 
     body = json.dumps({"text": text, "speedScale": speed_scale, "voice": voice_name}).encode("utf-8")
@@ -113,13 +122,30 @@ def request_and_cache(text: str, speed_scale: float, voice_name: str, speaker_id
         BACKEND_URL, data=body, headers={"Content-Type": "application/json"}, method="POST"
     )
     with urllib.request.urlopen(req, timeout=30) as resp:
-        resp.read()  # 백엔드가 TTS_CACHE_DIR에 알아서 저장한다 - 응답 바이트 자체는 필요 없다.
+        raw = resp.read()  # 캐시에 없는 조합이므로 VOICEVOX 실시간 합성 결과(WAV)가 내려온다.
+
+    # WAV 그대로 두면 용량이 7배 넘게 커진다. 커밋 전에 AAC로 변환해서 저장한다.
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
+        tmp.write(raw)
+        tmp_path = Path(tmp.name)
+    try:
+        subprocess.run(
+            ["ffmpeg", "-v", "error", "-y", "-i", str(tmp_path),
+             "-c:a", "aac", "-b:a", "48k", "-ac", "1", str(target)],
+            check=True,
+        )
+    finally:
+        tmp_path.unlink(missing_ok=True)
     return True
 
 
 def main() -> None:
     if not DATA_SQL.exists():
         print(f"data.sql을 찾을 수 없습니다: {DATA_SQL}", file=sys.stderr)
+        sys.exit(1)
+
+    if shutil.which("ffmpeg") is None:
+        print("ffmpeg이 필요합니다. macOS라면: brew install ffmpeg", file=sys.stderr)
         sys.exit(1)
 
     CACHE_DIR.mkdir(parents=True, exist_ok=True)

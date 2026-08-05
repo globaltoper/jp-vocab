@@ -17,16 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/tts")
 @RequiredArgsConstructor
-@Tag(name = "TTS", description = "VOICEVOX 기반 일본어 음성 합성 (인증 불필요). 응답이 audio/wav라 Swagger UI에서는 재생 대신 다운로드로 확인해야 한다.")
+@Tag(name = "TTS", description = "VOICEVOX 기반 일본어 음성 합성 (인증 불필요). 응답이 오디오 바이너리라 Swagger UI에서는 재생 대신 다운로드로 확인해야 한다.")
 public class TtsController {
 
     private final TtsService ttsService;
 
-    @PostMapping(value = "/speak", produces = "audio/wav")
+    @PostMapping(value = "/speak", produces = {"audio/mp4", "audio/wav"})
     public ResponseEntity<byte[]> speak(@Valid @RequestBody TtsSpeakRequest request) {
-        byte[] audio = ttsService.synthesize(request.text(), request.resolvedSpeedScale(), request.resolvedVoice());
+        // 미리 만들어둔 캐시는 AAC(audio/mp4), 실시간 합성 폴백은 원본 WAV라 응답 타입이 갈린다.
+        TtsService.TtsAudio audio =
+                ttsService.synthesize(request.text(), request.resolvedSpeedScale(), request.resolvedVoice());
         return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType("audio/wav"))
-                .body(audio);
+                .contentType(MediaType.parseMediaType(audio.contentType()))
+                .body(audio.data());
     }
 }

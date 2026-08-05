@@ -82,7 +82,7 @@ TTS_CACHE_DIR=src/main/resources/tts-cache ./gradlew bootRun
 # 3) 다른 터미널에서 (전체 콘텐츠 × 여성/남성 음성 전부 생성, 몇 분~몇십 분 소요)
 python3 scripts/warm_tts_cache.py
 
-# 4) 새로 생긴 .wav 파일들을 커밋
+# 4) 새로 생긴 .m4a 파일들을 커밋 (변환에 ffmpeg이 필요합니다)
 git add src/main/resources/tts-cache
 git commit -m "chore: warm up tts cache"
 ```
