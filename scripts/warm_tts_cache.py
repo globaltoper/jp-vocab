@@ -35,7 +35,12 @@ import urllib.request
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_SQL = PROJECT_ROOT / "src/main/resources/data.sql"
+# data.sql은 손으로 관리하는 시드, data-vocab.sql은 generate_vocab_sql.py가 만드는 자동 생성분.
+# 두 파일에 있는 단어를 모두 캐시 대상으로 삼아야 한다.
+DATA_SQL_FILES = [
+    PROJECT_ROOT / "src/main/resources/data.sql",
+    PROJECT_ROOT / "src/main/resources/data-vocab.sql",
+]
 CACHE_DIR = PROJECT_ROOT / "src/main/resources/tts-cache"
 BACKEND_URL = "http://localhost:8080/api/tts/speak"
 
@@ -85,28 +90,92 @@ def parse_sql_values(tuple_str: str) -> list[str]:
     return values
 
 
+def split_value_tuples(segment: str) -> tuple[list[str], int]:
+    """VALUES 뒤의 '(...), (...), (...);' 구간을 튜플 목록과 소비한 길이로 반환한다.
+
+    문자열 리터럴 안의 괄호/세미콜론에 속지 않도록 따옴표 상태를 추적한다.
+    """
+    tuples: list[str] = []
+    depth = 0
+    in_string = False
+    buf: list[str] = []
+    i, n = 0, len(segment)
+    while i < n:
+        ch = segment[i]
+        if in_string:
+            if ch == "'":
+                if i + 1 < n and segment[i + 1] == "'":  # '' 는 이스케이프된 따옴표
+                    buf.append("''")
+                    i += 2
+                    continue
+                in_string = False
+            buf.append(ch)
+        elif ch == "'":
+            in_string = True
+            buf.append(ch)
+        elif ch == "(":
+            depth += 1
+            if depth == 1:
+                buf = []          # 튜플 시작 - 여는 괄호는 담지 않는다
+            else:
+                buf.append(ch)
+        elif ch == ")":
+            depth -= 1
+            if depth == 0:
+                tuples.append("".join(buf))
+            else:
+                buf.append(ch)
+        elif ch == ";" and depth == 0:
+            i += 1                # 한 INSERT 문의 끝
+            break
+        elif depth > 0:
+            buf.append(ch)
+        i += 1
+    return tuples, i
+
+
 def extract_texts(table: str, value_index: int) -> list[str]:
-    """data.sql에서 특정 테이블의 INSERT 문들을 찾아, 지정한 인덱스의 값(문장/단어 텍스트)만 뽑는다."""
-    prefix = f"INSERT IGNORE INTO {table} ("
-    values_marker = ") VALUES ("
-    texts = []
-    for line in DATA_SQL.read_text(encoding="utf-8").splitlines():
-        line = line.strip()
-        if not line.startswith(prefix):
+    """시드 SQL에서 특정 테이블의 INSERT 문을 찾아, 지정한 인덱스의 값만 뽑는다.
+
+    data.sql은 한 줄에 한 행이지만, 자동 생성되는 data-vocab.sql은 기동 속도를 위해
+    여러 행을 한 INSERT로 묶어두었다. 두 형태 모두 처리해야 한다.
+    """
+    marker = f"INSERT IGNORE INTO {table} ("
+    values_marker = ") VALUES"
+    texts: list[str] = []
+
+    for path in DATA_SQL_FILES:
+        if not path.exists():
             continue
-        idx = line.index(values_marker)
-        tuple_str = line[idx + len(values_marker):]
-        if tuple_str.endswith(");"):
-            tuple_str = tuple_str[:-2]
-        values = parse_sql_values(tuple_str)
-        texts.append(values[value_index])
+        text = path.read_text(encoding="utf-8")
+        pos = 0
+        while True:
+            start = text.find(marker, pos)
+            if start == -1:
+                break
+            vstart = text.find(values_marker, start)
+            if vstart == -1:
+                break
+            body_start = vstart + len(values_marker)
+            tuple_strs, consumed = split_value_tuples(text[body_start:])
+            for tuple_str in tuple_strs:
+                values = parse_sql_values(tuple_str)
+                if value_index < len(values):
+                    texts.append(values[value_index])
+            pos = body_start + consumed
+
     return texts
 
 
 def cache_key(text: str, speaker_id: int, speed_scale: float) -> str:
-    """백엔드 TtsService.cacheKey()와 정확히 같은 방식으로 계산해야 같은 파일을 가리킨다."""
+    """백엔드 TtsService.cacheKey()와 정확히 같은 방식으로 계산해야 같은 파일을 가리킨다.
+
+    구분자는 공백이 아니라 NUL('\\0')이다. 일본어 문장에 공백/기호가 들어갈 수 있어서
+    흔한 구분자를 쓰면 서로 다른 조합이 같은 키로 뭉개질 수 있기 때문이다.
+    TtsService.cacheKey() 와 한 글자라도 달라지면 캐시가 통째로 어긋난다.
+    """
     normalized_speed = f"{speed_scale:.2f}"
-    raw = f"{text} {speaker_id} {normalized_speed}"
+    raw = f"{text}\0{speaker_id}\0{normalized_speed}"
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()
 
 
@@ -140,8 +209,9 @@ def request_and_cache(text: str, speed_scale: float, voice_name: str, speaker_id
 
 
 def main() -> None:
-    if not DATA_SQL.exists():
-        print(f"data.sql을 찾을 수 없습니다: {DATA_SQL}", file=sys.stderr)
+    if not any(p.exists() for p in DATA_SQL_FILES):
+        print("시드 SQL을 찾을 수 없습니다: "
+              + ", ".join(str(p) for p in DATA_SQL_FILES), file=sys.stderr)
         sys.exit(1)
 
     if shutil.which("ffmpeg") is None:
