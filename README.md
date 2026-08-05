@@ -110,10 +110,30 @@ Railway(백엔드+MySQL) + Vercel(프론트엔드)로 배포하는 단계별 가
 JMdict에서 파생된 데이터 파일은 ShareAlike 조건에 따라 CC BY-SA 4.0으로 배포됩니다.
 이 조건은 데이터에만 적용되며 애플리케이션 코드에는 적용되지 않습니다.
 
+### 어휘 데이터 파이프라인
+
+단어 데이터는 손으로 관리하지 않고 아래 순서로 생성합니다.
+
+```bash
+pip install jamdict jamdict-data          # JMdict를 SQLite로 패키징한 배포판
+
+# 1) JMdict에서 학습용 상용어 추출 (읽기/영어뜻/품사/레벨)
+python3 scripts/extract_jmdict_vocab.py --out build/vocab_raw.csv
+
+# 2) 한국어 뜻과 합쳐서 시드 SQL 생성
+python3 scripts/generate_vocab_sql.py     # -> src/main/resources/data-vocab.sql
+```
+
+- 단어 선정은 JMdict의 `ichi1` 태그(『一万語語彙分類集』 수록 상용어)를 기준으로 합니다.
+  신문 빈도 태그(`nf**`)는 「食べる」「行く」 같은 기초 동사가 빠져서 학습용으로 부적합했습니다.
+- 한국어 뜻은 `data/translations_ko.tsv`에서 관리합니다(표제어 → 뜻). 검수할 때는
+  `build/vocab_raw.csv`의 `english` 컬럼과 대조하면 됩니다.
+- `data-vocab.sql`은 자동 생성 파일이라 직접 수정하면 다음 생성 때 덮어써집니다.
+
 ### 데이터 갱신
 
 JMdict 라이선스는 데이터를 최신 버전으로 정기 갱신할 것을 요구합니다(4항).
-갱신 절차는 `LICENSES.md`와 갱신 스크립트를 참고하세요.
+`pip install -U jamdict-data` 로 사전 데이터를 갱신한 뒤 위 파이프라인을 다시 실행하세요.
 
 ## 참고 (명세와 다르게 구현한 부분)
 

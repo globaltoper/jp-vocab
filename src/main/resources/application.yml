@@ -33,6 +33,12 @@ spring:
       # data.sql은 INSERT IGNORE로 작성되어 있어 매 기동시 실행돼도 기존 데이터를 건드리지 않고 안전하다.
       mode: always
       encoding: UTF-8
+      # data-vocab.sql은 scripts/generate_vocab_sql.py가 만드는 자동 생성 파일이라 손으로 관리하는
+      # data.sql과 분리해 둔다. 2,500개가 넘는 행이지만 여러 행을 한 INSERT로 묶어서
+      # 문장 수는 십수 개뿐이라 기동 속도에 부담이 없다.
+      data-locations:
+        - classpath:data.sql
+        - classpath:data-vocab.sql
 
 jwt:
   # 데모/개발용 시크릿. 운영 배포 전 반드시 환경변수(JWT_SECRET)로 교체할 것 (32자 이상, 안 그러면 서버가 안 뜬다).
