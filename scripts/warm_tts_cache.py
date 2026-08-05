@@ -10,8 +10,11 @@ src/main/resources/tts-cache 에 캐시 파일로 채워두는 스크립트.
 
 사용법:
   1) 로컬 VOICEVOX 도커를 켠다 (README.md의 "발음(TTS)" 섹션 참고).
-  2) 캐시가 바로 src/main/resources/tts-cache 에 쌓이도록 지정해서 백엔드를 켠다:
-       TTS_CACHE_DIR=src/main/resources/tts-cache ./gradlew bootRun
+  2) 백엔드를 켠다. TTS_CACHE_DIR은 기본값(임시 폴더) 그대로 두는 게 좋다:
+       ./gradlew bootRun
+     주의: 여기에 src/main/resources/tts-cache 를 지정하면 안 된다. 백엔드는 실시간 합성
+     결과를 원본 WAV로 그 폴더에 쓰는데, 이 스크립트가 만드는 m4a와 내용이 같은 중복이
+     수천 개 쌓여서 저장소가 몇 배로 불어난다(실제로 171MB가 낭비된 적이 있다).
   3) 이 스크립트를 실행한다 (프로젝트 루트 어디서 실행해도 상관없다):
        python3 scripts/warm_tts_cache.py
   4) 새로 생긴 .m4a 파일들을 git에 커밋한다:

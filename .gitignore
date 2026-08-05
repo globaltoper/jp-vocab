@@ -60,3 +60,6 @@ build/
 ### Python ###
 __pycache__/
 *.pyc
+
+### TTS 번들 캐시에는 m4a만 커밋한다 (wav는 백엔드 런타임 캐시가 흘려놓는 중복) ###
+src/main/resources/tts-cache/*.wav

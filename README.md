@@ -21,7 +21,8 @@ jp-vocab-backend/
 ├── src/main/java/com/toper/jpvocab/   # Spring Boot 백엔드
 ├── src/main/resources/
 │   ├── application.yml
-│   └── data.sql                       # 시드 데이터 (단어 110개 + 예문, N5~N1)
+│   ├── data.sql                       # 손으로 관리하는 시드 (예문·딕테이션 문장)
+│   └── data-vocab.sql                 # 자동 생성 단어 시드 (JMdict 기반, N5~N3)
 └── frontend/                          # React + TypeScript (Vite)
 ```
 
@@ -76,8 +77,8 @@ npm run dev
 
 ```bash
 # 1) 로컬 VOICEVOX 도커 실행 (위 2번 참고)
-# 2) 캐시가 바로 src/main/resources/tts-cache 에 쌓이도록 지정해서 백엔드 실행
-TTS_CACHE_DIR=src/main/resources/tts-cache ./gradlew bootRun
+# 2) 백엔드 실행 (TTS_CACHE_DIR은 기본값 그대로 둘 것 - 지정하면 중복 wav가 쌓입니다)
+./gradlew bootRun
 
 # 3) 다른 터미널에서 (전체 콘텐츠 × 여성/남성 음성 전부 생성, 몇 분~몇십 분 소요)
 python3 scripts/warm_tts_cache.py
