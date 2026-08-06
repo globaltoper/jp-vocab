@@ -31,11 +31,15 @@ public class WordController {
         return ResponseEntity.ok(wordService.getWordDetail(wordId));
     }
 
+    /**
+     * 단어 목록. keyword를 주면 표제어/후리가나/뜻 어느 쪽에든 걸리는 단어만 돌려준다.
+     */
     @GetMapping
     public ResponseEntity<WordPageResponse> getWords(
             @RequestParam(required = false) JlptLevel level,
+            @RequestParam(required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size) {
-        return ResponseEntity.ok(wordService.getWords(level, page, size));
+        return ResponseEntity.ok(wordService.getWords(level, keyword, page, size));
     }
 }

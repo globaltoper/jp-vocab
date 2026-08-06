@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,11 +43,24 @@ public class WordService {
     }
 
     @Transactional(readOnly = true)
-    public WordPageResponse getWords(JlptLevel level, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Word> wordPage = (level == null)
-                ? wordRepository.findAll(pageable)
-                : wordRepository.findByLevel(level, pageable);
+    public WordPageResponse getWords(JlptLevel level, String keyword, int page, int size) {
+        // 표제어 순으로 정렬해야 페이지를 넘길 때 순서가 흔들리지 않는다.
+        // (정렬을 지정하지 않으면 DB가 임의 순서로 돌려줄 수 있다.)
+        Pageable pageable = PageRequest.of(page, size, Sort.by("expression"));
+
+        boolean hasKeyword = keyword != null && !keyword.isBlank();
+        String trimmed = hasKeyword ? keyword.trim() : null;
+
+        Page<Word> wordPage;
+        if (hasKeyword && level != null) {
+            wordPage = wordRepository.searchByLevel(level, trimmed, pageable);
+        } else if (hasKeyword) {
+            wordPage = wordRepository.search(trimmed, pageable);
+        } else if (level != null) {
+            wordPage = wordRepository.findByLevel(level, pageable);
+        } else {
+            wordPage = wordRepository.findAll(pageable);
+        }
         return WordPageResponse.from(wordPage);
     }
 

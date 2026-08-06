@@ -40,9 +40,15 @@ export const wordApi = {
   getRandom: (level?: JlptLevel) =>
     apiClient.get<WordCard>(`/words/random${level ? `?level=${level}` : ""}`),
   getDetail: (wordId: number) => apiClient.get<WordDetail>(`/words/${wordId}`),
-  getList: (level: JlptLevel | undefined, page: number, size: number) => {
+  getList: (
+    level: JlptLevel | undefined,
+    page: number,
+    size: number,
+    keyword?: string,
+  ) => {
     const params = new URLSearchParams({ page: String(page), size: String(size) });
     if (level) params.set("level", level);
+    if (keyword && keyword.trim()) params.set("keyword", keyword.trim());
     return apiClient.get<WordPage>(`/words?${params.toString()}`);
   },
 };

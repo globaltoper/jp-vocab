@@ -87,7 +87,7 @@ class WordControllerTest {
     @DisplayName("GET /api/words - 페이지네이션 파라미터 기본값(page=0, size=20) 적용")
     void getWords_defaultPagination() throws Exception {
         WordPageResponse response = new WordPageResponse(List.of(), 0, 20, 0L, 0);
-        when(wordService.getWords(isNull(), eq(0), eq(20))).thenReturn(response);
+        when(wordService.getWords(isNull(), isNull(), eq(0), eq(20))).thenReturn(response);
 
         mockMvc.perform(get("/api/words"))
                 .andExpect(status().isOk())
@@ -99,11 +99,22 @@ class WordControllerTest {
     @DisplayName("GET /api/words?page=2&size=10 - 커스텀 페이지네이션 파라미터가 서비스로 전달된다")
     void getWords_customPagination() throws Exception {
         WordPageResponse response = new WordPageResponse(List.of(), 2, 10, 25L, 3);
-        when(wordService.getWords(isNull(), eq(2), eq(10))).thenReturn(response);
+        when(wordService.getWords(isNull(), isNull(), eq(2), eq(10))).thenReturn(response);
 
         mockMvc.perform(get("/api/words").param("page", "2").param("size", "10"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalElements").value(25))
                 .andExpect(jsonPath("$.totalPages").value(3));
+    }
+
+    @Test
+    @DisplayName("GET /api/words?keyword=... - 검색어가 서비스로 전달된다")
+    void getWords_withKeyword() throws Exception {
+        WordPageResponse response = new WordPageResponse(List.of(), 0, 20, 1L, 1);
+        when(wordService.getWords(isNull(), eq("食"), eq(0), eq(20))).thenReturn(response);
+
+        mockMvc.perform(get("/api/words").param("keyword", "食"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalElements").value(1));
     }
 }

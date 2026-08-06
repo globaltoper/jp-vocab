@@ -186,7 +186,7 @@ erDiagram
 |---|---|---|---|
 | GET | `/random?level=` | 선택 | `WordCardResponse`(로그인 시 `isSaved` 정확히 계산) |
 | GET | `/{wordId}` | 선택 | `WordDetailResponse`(예문 + 클릭 가능한 단어 링크 포함) |
-| GET | `/?level=&page=&size=` | 선택 | `WordPageResponse`(페이지네이션) |
+| GET | `/?level=&keyword=&page=&size=` | 선택 | `WordPageResponse`(페이지네이션 + 검색). `keyword`는 표제어·후리가나·뜻 중 어디든 부분 일치 |
 
 ### 4.3 `/api/saved-words` — 내 단어장 (전부 필수)
 

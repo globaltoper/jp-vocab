@@ -5,6 +5,7 @@ import { Footer } from "./components/Footer";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { HomePage } from "./pages/HomePage";
 import { WordCardPage } from "./pages/WordCardPage";
+import { WordListPage } from "./pages/WordListPage";
 import { WordDetailPage } from "./pages/WordDetailPage";
 import { SavedWordsPage } from "./pages/SavedWordsPage";
 import { ReviewPage } from "./pages/ReviewPage";
@@ -25,6 +26,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/words" element={<WordCardPage />} />
+            <Route path="/words/list" element={<WordListPage />} />
             <Route path="/words/:wordId" element={<WordDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />

@@ -46,6 +46,9 @@ export function HomePage() {
 
       <h2 className="home-section-title">다른 학습 모드</h2>
       <div className="home-secondary-links">
+        <Link to="/words/list" className="home-secondary-link">
+          🔍 단어 목록
+        </Link>
         <Link to="/dictation" className="home-secondary-link">
           🎧 딕테이션
         </Link>
